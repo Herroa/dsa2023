@@ -1,6 +1,7 @@
 #include<stdio.h>
 #include<stdlib.h>
-#include <sys/time.h>
+#include<sys/time.h>
+#include<time.h>
 
 int getrand(int min,int max)
 {
@@ -142,43 +143,45 @@ void mergesort(int arr[], int l, int r)
 
 int main()
 {
-    int size = 50000;
-    int *array1, *array2, *array3;
-    array1 = malloc(sizeof(int) * size);
-    array2 = malloc(sizeof(int) * size);
-    array3 = malloc(sizeof(int) * size);
+    for(int size = 50000;size <= 1000000; size+=50000){
+        int *array1, *array2, *array3;
+        array1 = malloc(sizeof(int) * size);
+        array2 = malloc(sizeof(int) * size);
+        array3 = malloc(sizeof(int) * size);
+        
+        
+        for(int i = 0; i<size; i++)
+        {
+            array1[i]= getrand(0,1000);
+            array2[i]= getrand(0,1000);
+            array3[i]= getrand(0,1000);
+        }
+        
+        double tinsert, tcounting, tmerge;
+        printf("size = %d\n",size);
+        tinsert = wtime();
+        insertionsort(array1,size);
+        tinsert = wtime() - tinsert;
+        printf("tinsert = %.6lf\n", tinsert);
+        // printarray(array1,size);
     
-    
-    for(int i = 0; i<size; i++)
-    {
-        array1[i]= getrand(0,1000);
-        array2[i]= getrand(0,1000);
-        array3[i]= getrand(0,1000);
+        tcounting = wtime();
+        countingsort(array2,size);
+        tcounting = wtime() - tcounting;
+        printf("tcounting = %.6lf\n", tcounting);
+        // printarray(array2,size);
+        
+        tmerge = wtime();
+        mergesort(array3,0,size-1);
+        tmerge = wtime() - tmerge;
+        printf("tmerge = %.6lf\n", tmerge);
+        // printarray(array3,size);
+        
+        printf("%.6lf\n%.6lf\n%.6lf\n",tinsert,tcounting,tmerge);
+
+        free(array1);
+        free(array2);
+        free(array3);
     }
-    
-    double tinsert, tcounting, tmerge;
-
-    tinsert = wtime();
-    insertionsort(array1,size);
-    tinsert = wtime() - tinsert;
-    printf("tinsert = %.6lf\n", tinsert);
-    // printarray(array1,size);
-   
-    tcounting = wtime();
-    countingsort(array2,size);
-    tcounting = wtime() - tcounting;
-    printf("tcounting = %.6lf\n", tcounting);
-    // printarray(array2,size);
-    
-    tmerge = wtime();
-    mergesort(array3,0,size-1);
-    tmerge = wtime() - tmerge;
-    printf("tmerge = %.6lf\n", tmerge);
-    // printarray(array3,size);
-    
-
-    free(array1);
-    free(array2);
-    free(array3);
     return 0;
 }
