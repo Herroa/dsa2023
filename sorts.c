@@ -30,17 +30,6 @@ void swap(int *x, int *y)
     *y = temp;
 }
 
-void bubblesort(int *array,int size)
-{
-    for(int i=0;i<size;i++){
-        for(int j=0;j<size-1-i;j++){
-            if(array[j]>array[j+1]){
-                swap(&array[j],&array[j+1]);
-            }
-        }
-    }
-}
-
 void insertionsort(int *array,int size)
 {
     for(int i=0;i<size-1;i++){
@@ -154,8 +143,12 @@ void mergesort(int arr[], int l, int r)
 int main()
 {
     int size = 50000;
-    int array1[size], array2[size], array3[size];
-    double tinsert, tcounting, tmerge;
+    int *array1, *array2, *array3;
+    array1 = malloc(sizeof(int) * size);
+    array2 = malloc(sizeof(int) * size);
+    array3 = malloc(sizeof(int) * size);
+    
+    
     for(int i = 0; i<size; i++)
     {
         array1[i]= getrand(0,1000);
@@ -163,27 +156,29 @@ int main()
         array3[i]= getrand(0,1000);
     }
     
-    // bubblesort(array,size);
-    
+    double tinsert, tcounting, tmerge;
+
     tinsert = wtime();
     insertionsort(array1,size);
     tinsert = wtime() - tinsert;
-    printf("tinsert = %lf\n", tinsert);
+    printf("tinsert = %.6lf\n", tinsert);
+    // printarray(array1,size);
    
     tcounting = wtime();
     countingsort(array2,size);
     tcounting = wtime() - tcounting;
-    printf("tcounting = %lf\n", tcounting);
+    printf("tcounting = %.6lf\n", tcounting);
+    // printarray(array2,size);
     
     tmerge = wtime();
     mergesort(array3,0,size-1);
     tmerge = wtime() - tmerge;
-    printf("tmerge = %lf\n", tmerge);
+    printf("tmerge = %.6lf\n", tmerge);
+    // printarray(array3,size);
     
 
-
-
-
-
+    free(array1);
+    free(array2);
+    free(array3);
     return 0;
 }
