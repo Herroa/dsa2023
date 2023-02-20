@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<sys/time.h>
 #include<time.h>
+#include<assert.h>
 
 int getrand(int min,int max)
 {
@@ -77,7 +78,7 @@ void countingsort(int *array,int size)
     //fill origin array
 }
 
-void merge(int arr[], int l, int m, int r)
+void merge(int *array, int l, int m, int r)
 {
     int i, j, k;
     int n1 = m - l + 1;
@@ -87,9 +88,9 @@ void merge(int arr[], int l, int m, int r)
     //left and right array
   
     for (i = 0; i < n1; i++)
-        L[i] = arr[l + i];
+        L[i] = array[l + i];
     for (j = 0; j < n2; j++)
-        R[j] = arr[m + 1 + j];
+        R[j] = array[m + 1 + j];
     //copy data
   
     i = 0; 
@@ -97,35 +98,35 @@ void merge(int arr[], int l, int m, int r)
     k = l;
     while (i < n1 && j < n2) {
         if (L[i] <= R[j]) {
-            arr[k] = L[i];
+            array[k] = L[i];
             i++;
         }
         else {
-            arr[k] = R[j];
+            array[k] = R[j];
             j++;
         }
         k++;
     }
     while (i < n1) {
-        arr[k] = L[i];
+        array[k] = L[i];
         i++;
         k++;
     }
     while (j < n2) {
-        arr[k] = R[j];
+        array[k] = R[j];
         j++;
         k++;
     }
 }
 
-void mergesort(int arr[], int l, int r)
+void mergesort(int *array, int l, int r)
 {
     if (l < r) {
         int m = l + (r - l) / 2;
-        mergesort(arr, l, m);
-        mergesort(arr, m + 1, r);
+        mergesort(array, l, m);
+        mergesort(array, m + 1, r);
   
-        merge(arr, l, m, r);
+        merge(array, l, m, r);
     }
 }
 
@@ -152,18 +153,27 @@ int main()
         tinsert = wtime() - tinsert;
         printf("tinsert = %.6lf\n", tinsert);
         // printarray(array1,size);
+        for(int i = 1;i<size;i++){
+            assert((array1[i-1] <= array1[i]) && "array1 did not sorted");
+        }
     
         tcounting = wtime();
         countingsort(array2,size);
         tcounting = wtime() - tcounting;
         printf("tcounting = %.6lf\n", tcounting);
         // printarray(array2,size);
+        for(int i = 1;i<size;i++){
+            assert((array2[i-1] <= array2[i]) && "array2 did not sorted");
+        }
         
         tmerge = wtime();
         mergesort(array3,0,size-1);
         tmerge = wtime() - tmerge;
         printf("tmerge = %.6lf\n", tmerge);
         // printarray(array3,size);
+        for(int i = 1;i<size;i++){
+            assert((array3[i-1] <= array3[i]) && "array3 did not sorted");
+        }
         
         printf("%.6lf\n%.6lf\n%.6lf\n",tinsert,tcounting,tmerge);
 
