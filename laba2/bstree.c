@@ -7,39 +7,37 @@ void tree_print(node * tree) {
           // ничего не делать
     else {
         tree_print(tree->left);     // печатаем левое поддерево (меньшие числа)
-        printf("%d ", tree->key);  // печатаем корень
+        printf("%d \n", tree->value); // печатаем корень
         tree_print(tree->right);     // печатаем правое поддерево (большие числа)
     }
-    printf("\n");
 }
 
-node *create(node *root, int key)
+node *bstree_create(char *key, int value)
 {
 // Выделение памяти под корень дерева
     node *tmp = malloc(sizeof(node));
 // Присваивание значения ключу
-    tmp -> key = key;
+    tmp -> value = value;
 // Присваивание указателю на родителя значения NULL
     tmp -> parent = NULL;
 // Присваивание указателю на левое и правое поддерево значения NULL
     tmp -> left = tmp -> right = NULL;
-    root = tmp;
-    return root;
+    return tmp;
 }
 
-node *add(node *root, int key)
+node *add(node *root, int value)
 {
     node *root2 = root, *root3 = NULL;
 // Выделение памяти под узел дерева
     node *tmp = malloc(sizeof(node));
 // Присваивание значения ключу
-    tmp -> key = key;
+    tmp -> value = value;
 /* Поиск нужной позиции для вставки (руководствуемся правилом 
 вставки элементов, см. начало статьи, пункт 3) */
     while (root2 != NULL)
     {
         root3 = root2;
-        if (key < root2 -> key)
+        if (value < root2 -> value)
             root2 = root2 -> left;
         else
             root2 = root2 -> right;
@@ -52,24 +50,24 @@ node *add(node *root, int key)
     tmp -> right = NULL;
 /* Вставляем узел в дерево (руководствуемся правилом
 вставки элементов, см. начало статьи, пункт 3) */
-    if (key < root3 -> key) root3 -> left = tmp;
+    if (value < root3 -> value) root3 -> left = tmp;
     else root3 -> right = tmp;
     return root;
 }
 
-node *search(node * root, int key)
+node *search(node * root, int value)
 {
 // Если дерево пусто или ключ корня равен искомому ключу, то возвращается указатель на корень
-    if ((root == NULL) || (root -> key == key))
+    if ((root == NULL) || (root -> value == value))
         return root;
 // Поиск нужного узла
-    if (key < root -> key)
-        return search(root -> left, key);
-    else return search(root -> right, key);
+    if (value < root -> value)
+        return search(root -> left, value);
+    else return search(root -> right, value);
 }
 
 // Минимальный элемент дерева
-node *min(node *root)
+node *bstree_min(node *root)
 {
     node *l = root;
     while (l -> left != NULL)
@@ -78,7 +76,7 @@ node *min(node *root)
 }
 
 // Максимальный элемент дерева
-node *max(node *root)
+node *bstree_max(node *root)
 {
     node *r = root;
     while (r -> right != NULL)
@@ -91,10 +89,16 @@ node *max(node *root)
 
 int main()
 {
-    node *tree;
+    node *tree = NULL;
+    char init[4] = "Roma";
     int value = 10;
-    tree = create(tree,value);
-    add(tree,15);
+    tree = bstree_create(init, value);
+    add(tree,3);
+    add(tree,100);
+    add(tree,320);
+    add(tree,10034);
     tree_print(tree);
+    printf("%d\n",bstree_min(tree)->value);
+    printf("%d\n",bstree_max(tree)->value);
     return 0;
 }
