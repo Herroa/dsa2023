@@ -29,7 +29,9 @@ void bstree_add(struct bstree *tree, char *key, int value)
     if(tree == NULL){
         return;
     }
+    struct bstree *parent, *node;
     while(tree != NULL){
+        parent = tree;
         if(strcmp(tree -> key,key)){
             tree = tree -> left;
         }
@@ -37,10 +39,14 @@ void bstree_add(struct bstree *tree, char *key, int value)
             tree = tree -> right;
         }
         else{
-            tree = bstree_create(key,value);
             return;
         }
     }
+    node = bstree_create(key, value);
+        if (key < parent->key)
+            parent->left = node;
+        else
+            parent->right = node;
 }
 
 struct bstree *bstree_lookup(struct bstree *tree, char *key)
