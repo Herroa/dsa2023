@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include "bstree.h"
 
 void tree_print(struct bstree * tree) {
@@ -25,14 +26,12 @@ struct bstree *bstree_create(char *key, int value)
     return tmp;
 }
 
-void bstree_add(struct bstree *tree, char *key)
+void bstree_add(struct bstree *tree, char *key, int value)
 {
     if(tree == NULL){
         return;
     }
-    struct bstree *parent;
     while(tree != NULL){
-        parent = tree;
         if(strcmp(tree -> key,key)){
             tree = tree -> left;
         }
@@ -40,6 +39,8 @@ void bstree_add(struct bstree *tree, char *key)
             tree = tree -> right;
         }
         else{
+            tree -> value = value;
+            tree -> key = key;
             return;
         }
     }
@@ -58,18 +59,22 @@ struct bstree *bstree_lookup(struct bstree *tree, char *key)
     return tree;
 }
 
-// Минимальный элемент дерева
+
 struct bstree *bstree_min(struct bstree *tree)
 {
+    if (tree == NULL)
+        return NULL;
     struct bstree *l = tree;
     while (l -> left != NULL)
         l = l -> left;
-    return l;
+        return l;
 }
 
-// Максимальный элемент дерева
+
 struct bstree *bstree_max(struct bstree *tree)
 {
+    if (tree == NULL)
+        return NULL;
     struct bstree *r = tree;
     while (r -> right != NULL)
         r = r -> right;
