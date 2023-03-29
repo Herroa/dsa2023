@@ -43,7 +43,7 @@ void bstree_add(struct bstree *tree, char *key, int value)
         }
     }
     node = bstree_create(key, value);
-        if (key < parent->key)
+        if (strcmp(parent->key,key))
             parent->left = node;
         else
             parent->right = node;
@@ -90,8 +90,8 @@ struct bstree *bstree_max(struct bstree *tree)
 int main()
 {
     struct bstree *tree = NULL;
-    tree = bstree_create("roma", 10);
-    bstree_add(tree,"zzzzasha",20);
+    tree = bstree_create("zzzzzroma", 100);
+    bstree_add(tree,"asha",20);
     // tree_print(tree);
     printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
     printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
