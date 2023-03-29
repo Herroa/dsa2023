@@ -1,14 +1,10 @@
 
-typedef struct ht_item{
+struct listnode {
     char *key;
-    char *value;
-} item;
+    int value;
 
-typedef struct listnode{
-    item **items;
-    int size;
-    int count;
-} table;
+    struct listnode *next;
+};
 
 unsigned int hashtab_hash(char *key);
 
