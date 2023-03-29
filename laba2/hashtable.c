@@ -55,7 +55,7 @@ void hashtab_delete(struct listnode **hashtab, char *key)
             if (prev == NULL)
             hashtab[index] = node->next;
             else
-            prev->next = node->next;
+                prev->next = node->next;
             free(node);
             return;
     }
