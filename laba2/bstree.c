@@ -25,12 +25,12 @@ struct bstree *bstree_create(char *key, int value)
     return tmp;
 }
 
-void bstree_add(struct bstree *tree, char *key, int value)
+void bstree_add(struct bstree *tree, char *key)
 {
     if(tree == NULL){
         return;
     }
-    struct bstree *parent, node;
+    struct bstree *parent;
     while(tree != NULL){
         parent = tree;
         if(key < tree -> key){
@@ -42,9 +42,7 @@ void bstree_add(struct bstree *tree, char *key, int value)
         else{
             return;
         }
-
     }
-
 }
 
 struct bstree *search(struct bstree * root, int value)
@@ -85,10 +83,7 @@ int main()
     char init[4] = "Roma";
     int value = 10;
     tree = bstree_create(init, value);
-    add(tree,3);
-    add(tree,100);
-    add(tree,320);
-    add(tree,10034);
+    bstree_add(tree,3);
     tree_print(tree);
     printf("%d\n",bstree_min(tree)->value);
     printf("%d\n",bstree_max(tree)->value);
