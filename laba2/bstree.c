@@ -5,11 +5,10 @@
 
 void tree_print(struct bstree * tree) {
     if (tree == NULL){} 
-          // ничего не делать
     else {
-        tree_print(tree->left);     // печатаем левое поддерево (меньшие числа)
-        printf("%d \n", tree->value); // печатаем корень
-        tree_print(tree->right);     // печатаем правое поддерево (большие числа)
+        tree_print(tree->left);
+        printf("%d \n", tree->value); 
+        tree_print(tree->right);
     }
 }
 
@@ -19,7 +18,6 @@ struct bstree *bstree_create(char *key, int value)
     if(tmp != NULL){
         tmp -> key = key;
         tmp -> value = value;
-        tmp -> parent = NULL;
         tmp -> left = NULL;
         tmp -> right = NULL;
     }
@@ -39,8 +37,7 @@ void bstree_add(struct bstree *tree, char *key, int value)
             tree = tree -> right;
         }
         else{
-            tree -> value = value;
-            tree -> key = key;
+            tree = bstree_create(key,value);
             return;
         }
     }
@@ -88,9 +85,9 @@ int main()
 {
     struct bstree *tree = NULL;
     tree = bstree_create("roma", 10);
-    bstree_add(tree,"pasha",20);
-    tree_print(tree);
-    printf("%d\n",bstree_min(tree)->value);
-    printf("%d\n",bstree_max(tree)->value);
+    bstree_add(tree,"zzzzasha",20);
+    // tree_print(tree);
+    printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
+    printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
     return 0;
 }
