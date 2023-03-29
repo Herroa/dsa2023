@@ -67,7 +67,7 @@ struct bstree *bstree_min(struct bstree *tree)
     struct bstree *l = tree;
     while (l -> left != NULL)
         l = l -> left;
-        return l;
+    return l;
 }
 
 
@@ -88,7 +88,7 @@ int main()
 {
     struct bstree *tree = NULL;
     tree = bstree_create("roma", 10);
-    bstree_add(tree,"pasha");
+    bstree_add(tree,"pasha",20);
     tree_print(tree);
     printf("%d\n",bstree_min(tree)->value);
     printf("%d\n",bstree_max(tree)->value);
