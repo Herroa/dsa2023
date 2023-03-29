@@ -46,6 +46,22 @@ struct listnode *hashtab_lookup(struct listnode **hashtab, char *key)
     return NULL;
 }
 
+void hashtab_delete(struct listnode **hashtab, char *key)
+{
+    struct listnode *node, *prev = NULL;
+    int index = hashtab_hash(key);
+    for (node = hashtab[index]; node != NULL; node = node->next) {
+        if (0 == strcmp(node->key, key)) {
+            if (prev == NULL)
+            hashtab[index] = node->next;
+            else
+            prev->next = node->next;
+            free(node);
+            return;
+    }
+    prev = node;
+    }
+}
 
 int main()
 {
