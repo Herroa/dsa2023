@@ -45,15 +45,17 @@ void bstree_add(struct bstree *tree, char *key)
     }
 }
 
-struct bstree *search(struct bstree * root, int value)
+struct bstree *bstree_lookup(struct bstree *tree, char *key)
 {
-// Если дерево пусто или ключ корня равен искомому ключу, то возвращается указатель на корень
-    if ((root == NULL) || (root -> value == value))
-        return root;
-// Поиск нужного узла
-    if (value < root -> value)
-        return search(root -> left, value);
-    else return search(root -> right, value);
+    while (tree != NULL) {
+        if (key == tree->key)
+            return tree;
+        else if (key < tree->key)
+            tree = tree->left;
+        else
+            tree = tree->right;
+    }
+    return tree;
 }
 
 // Минимальный элемент дерева
@@ -80,10 +82,8 @@ struct bstree *bstree_max(struct bstree *tree)
 int main()
 {
     struct bstree *tree = NULL;
-    char init[4] = "Roma";
-    int value = 10;
-    tree = bstree_create(init, value);
-    bstree_add(tree,3);
+    tree = bstree_create("roma", 10);
+    bstree_add(tree,"pasha");
     tree_print(tree);
     printf("%d\n",bstree_min(tree)->value);
     printf("%d\n",bstree_max(tree)->value);
