@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include "bstree.h"
 
-void tree_print(node * tree) {
+void tree_print(struct bstree * tree) {
     if (tree == NULL){} 
           // ничего не делать
     else {
@@ -12,9 +12,9 @@ void tree_print(node * tree) {
     }
 }
 
-node *bstree_create(char *key, int value)
+struct bstree *bstree_create(char *key, int value)
 {
-    node *tmp = malloc(sizeof(node));
+    struct bstree *tmp = malloc(sizeof(struct bstree));
     if(tmp != NULL){
         tmp -> key = key;
         tmp -> value = value;
@@ -25,37 +25,29 @@ node *bstree_create(char *key, int value)
     return tmp;
 }
 
-node *add(node *root, int value)
+void bstree_add(struct bstree *tree, char *key, int value)
 {
-    node *root2 = root, *root3 = NULL;
-// Выделение памяти под узел дерева
-    node *tmp = malloc(sizeof(node));
-// Присваивание значения ключу
-    tmp -> value = value;
-/* Поиск нужной позиции для вставки (руководствуемся правилом 
-вставки элементов, см. начало статьи, пункт 3) */
-    while (root2 != NULL)
-    {
-        root3 = root2;
-        if (value < root2 -> value)
-            root2 = root2 -> left;
-        else
-            root2 = root2 -> right;
+    if(tree == NULL){
+        return;
     }
-/* Присваивание указателю на родителя значения указателя root3 
-(указатель root3 был найден выше) */
-    tmp -> parent = root3;
-// Присваивание указателю на левое и правое поддерево значения NULL
-    tmp -> left = NULL;
-    tmp -> right = NULL;
-/* Вставляем узел в дерево (руководствуемся правилом
-вставки элементов, см. начало статьи, пункт 3) */
-    if (value < root3 -> value) root3 -> left = tmp;
-    else root3 -> right = tmp;
-    return root;
+    struct bstree *parent, node;
+    while(tree != NULL){
+        parent = tree;
+        if(key < tree -> key){
+            tree = tree -> left;
+        }
+        else if(key > tree -> key){
+            tree = tree -> right;
+        }
+        else{
+            return;
+        }
+
+    }
+
 }
 
-node *search(node * root, int value)
+struct bstree *search(struct bstree * root, int value)
 {
 // Если дерево пусто или ключ корня равен искомому ключу, то возвращается указатель на корень
     if ((root == NULL) || (root -> value == value))
@@ -67,18 +59,18 @@ node *search(node * root, int value)
 }
 
 // Минимальный элемент дерева
-node *bstree_min(node *root)
+struct bstree *bstree_min(struct bstree *root)
 {
-    node *l = root;
+    struct bstree *l = root;
     while (l -> left != NULL)
         l = l -> left;
     return l;
 }
 
 // Максимальный элемент дерева
-node *bstree_max(node *root)
+struct bstree *bstree_max(struct bstree *root)
 {
-    node *r = root;
+    struct bstree *r = root;
     while (r -> right != NULL)
         r = r -> right;
     return r;
@@ -89,7 +81,7 @@ node *bstree_max(node *root)
 
 int main()
 {
-    node *tree = NULL;
+    struct bstree *tree = NULL;
     char init[4] = "Roma";
     int value = 10;
     tree = bstree_create(init, value);
