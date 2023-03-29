@@ -1,16 +1,17 @@
 
-typedef struct bstree
+struct bstree
 {
     int value;
-    char key[100];
+    char *key;
     struct bstree *left;
     struct bstree *right;
     struct bstree *parent;
-} node;
+};
 
-node *bstree_create(char *key, int value);
-// void bstree_add(node *tree, char *key, int value);
-// node *bstree_lookup(node *tree, char *key);
-// node *bstree_delete(node *tree, char *key);
-node *bstree_min(node *tree);
-node *bstree_max(node *tree);
+
+struct bstree *bstree_create(char *key, int value);
+// void bstree_add(struct bstree *tree, char *key, int value);
+// struct bstree *bstree_lookup(struct bstree *tree, char *key);
+// struct bstree *bstree_delete(struct bstree *tree, char *key);
+struct bstree *bstree_min(struct bstree *tree);
+struct bstree *bstree_max(struct bstree *tree);

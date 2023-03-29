@@ -14,14 +14,14 @@ void tree_print(node * tree) {
 
 node *bstree_create(char *key, int value)
 {
-// Выделение памяти под корень дерева
     node *tmp = malloc(sizeof(node));
-// Присваивание значения ключу
-    tmp -> value = value;
-// Присваивание указателю на родителя значения NULL
-    tmp -> parent = NULL;
-// Присваивание указателю на левое и правое поддерево значения NULL
-    tmp -> left = tmp -> right = NULL;
+    if(tmp != NULL){
+        tmp -> key = key;
+        tmp -> value = value;
+        tmp -> parent = NULL;
+        tmp -> left = NULL;
+        tmp -> right = NULL;
+    }
     return tmp;
 }
 
