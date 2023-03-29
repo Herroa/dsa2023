@@ -57,18 +57,18 @@ struct bstree *search(struct bstree * root, int value)
 }
 
 // Минимальный элемент дерева
-struct bstree *bstree_min(struct bstree *root)
+struct bstree *bstree_min(struct bstree *tree)
 {
-    struct bstree *l = root;
+    struct bstree *l = tree;
     while (l -> left != NULL)
         l = l -> left;
     return l;
 }
 
 // Максимальный элемент дерева
-struct bstree *bstree_max(struct bstree *root)
+struct bstree *bstree_max(struct bstree *tree)
 {
-    struct bstree *r = root;
+    struct bstree *r = tree;
     while (r -> right != NULL)
         r = r -> right;
     return r;
