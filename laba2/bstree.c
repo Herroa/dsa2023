@@ -33,10 +33,10 @@ void bstree_add(struct bstree *tree, char *key)
     struct bstree *parent;
     while(tree != NULL){
         parent = tree;
-        if(key < tree -> key){
+        if(strcmp(tree -> key,key)){
             tree = tree -> left;
         }
-        else if(key > tree -> key){
+        else if(strcmp(key,tree -> key)){
             tree = tree -> right;
         }
         else{
@@ -48,9 +48,9 @@ void bstree_add(struct bstree *tree, char *key)
 struct bstree *bstree_lookup(struct bstree *tree, char *key)
 {
     while (tree != NULL) {
-        if (key == tree->key)
+        if (strcmp(key,tree -> key) == 0)
             return tree;
-        else if (key < tree->key)
+        else if (strcmp(tree -> key,key))
             tree = tree->left;
         else
             tree = tree->right;
