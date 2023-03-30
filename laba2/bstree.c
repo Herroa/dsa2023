@@ -7,7 +7,7 @@ void tree_print(struct bstree * tree) {
     if (tree == NULL){} 
     else {
         tree_print(tree->left);
-        printf("%d \n", tree->value); 
+        printf("%s \n", tree->key); 
         tree_print(tree->right);
     }
 }
@@ -90,10 +90,21 @@ struct bstree *bstree_max(struct bstree *tree)
 int main()
 {
     struct bstree *tree = NULL;
-    tree = bstree_create("zzzzzroma", 100);
-    bstree_add(tree,"asha",20);
-    // tree_print(tree);
-    printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
-    printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
+    tree = bstree_create("zzz", 100);
+    // bstree_add(tree,"asha",20);
+    // printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
+    // printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
+    FILE *file;
+    if ((file = fopen("words.txt", "r"))==NULL) {
+        printf("Cannot open file.\n");
+        exit(1);
+    }
+    for(int i = 0;i<1000;i++){
+        char word[50];
+        fscanf(file, "%s", word);
+        // printf("%s\n",word);
+        bstree_add(tree, word, 0);
+    }
+    tree_print(tree);
     return 0;
 }
