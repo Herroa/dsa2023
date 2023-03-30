@@ -10,3 +10,6 @@ run_hashtable: hashtable
 
 run_bstree: bstree
 	./bstree
+
+clean:
+	rm -rf hashtable bstree
