@@ -32,10 +32,10 @@ void bstree_add(struct bstree *tree, char *key, int value)
     struct bstree *parent, *node;
     while(tree != NULL){
         parent = tree;
-        if(strcmp(tree -> key,key)){
+        if(strcmp(tree -> key,key)>0){
             tree = tree -> left;
         }
-        else if(strcmp(key,tree -> key)){
+        else if(strcmp(key,tree -> key)>0){
             tree = tree -> right;
         }
         else{
@@ -43,10 +43,11 @@ void bstree_add(struct bstree *tree, char *key, int value)
         }
     }
     node = bstree_create(key, value);
-        if (strcmp(parent->key,key))
+        if (strcmp(parent->key,key)>0)
             parent->left = node;
         else
             parent->right = node;
+    // printf("file added %s\n",key);
 }
 
 struct bstree *bstree_lookup(struct bstree *tree, char *key)
@@ -91,7 +92,9 @@ int main()
 {
     struct bstree *tree = NULL;
     tree = bstree_create("zzz", 100);
-    // bstree_add(tree,"asha",20);
+    bstree_add(tree,"dfassafsha", 20);
+    bstree_add(tree,"dfaadsfsdssafsha", 20);
+    bstree_add(tree,"dfassadsaffsha", 20);
     // printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
     // printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
     FILE *file;
@@ -99,12 +102,19 @@ int main()
         printf("Cannot open file.\n");
         exit(1);
     }
-    for(int i = 0;i<1000;i++){
-        char word[50];
-        fscanf(file, "%s", word);
-        // printf("%s\n",word);
-        bstree_add(tree, word, 0);
+    char **str = (char**)malloc(sizeof(char*));
+    int n = 0;
+    while (!feof(file))
+    {
+        str[n] = (char*)malloc(sizeof(char)* 256);
+        fgets(str[n], 256, file);
+        n++;
+        str = (char**)realloc(str, sizeof(char*)*(n + 1));
     }
-    tree_print(tree);
+    fclose(file);
+    for(int i = 0;i<100;i++)
+        bstree_add(tree, str[i], 1);
+    
+    // tree_print(tree);
     return 0;
 }
