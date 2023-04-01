@@ -1,8 +1,22 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <sys/time.h>
+#include <time.h>
 #include"hashtable.h"
-#define HASHTAB_SIZE 203
+#define HASHTAB_SIZE 203000
+
+double wtime()
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (double)t.tv_sec + (double)t.tv_usec * 1E-6;
+}
+
+int getrand(int min,int max)
+{
+    return (double)rand()/(RAND_MAX + 1.0) * (max - min) + min;
+}
 
 unsigned int hashtab_hash(char *s)
 {
@@ -65,14 +79,47 @@ void hashtab_delete(struct listnode **hashtab, char *key)
 
 int main()
 {
+    FILE *file;
+    if ((file = fopen("words.txt", "r"))==NULL) {
+        printf("Cannot open file.\n");
+        exit(1);
+    }
+    char **words = (char**)malloc(sizeof(char*));
+    int n = 0;
+    while (!feof(file))
+    {
+        words[n] = (char*)malloc(sizeof(char)* 256);
+        fgets(words[n], 256, file);
+        n++;
+        words = (char**)realloc(words, sizeof(char*)*(n + 1));
+    }
+    fclose(file);
+
+
     struct listnode *hashtab[HASHTAB_SIZE];
     struct listnode *node;
+    double t;
     hashtab_init(hashtab);
-    hashtab_add(hashtab, "Ocelot", 17);
-    hashtab_add(hashtab, "Flamingo", 4);
-    hashtab_add(hashtab, "Fox", 14);
-    node = hashtab_lookup(hashtab, "Flamingo");
-    if (node != NULL)
-    printf("Node: %s, %d\n", node->key, node->value);
+    for(int i = 2;i<200000;i++){
+        hashtab_add(hashtab, words[i], 17);
+        if (i%10000==0){
+            t = wtime();
+            node = hashtab_lookup(hashtab, words[getrand(0, i - 1)]);
+            t = wtime() - t;
+            printf("n = %d; time = %.6lf\n", i - 1, t);
+        }
+    }
+    ///
+    // struct listnode *hashtab[HASHTAB_SIZE];
+    // struct listnode *node;
+    // hashtab_init(hashtab);
+    // hashtab_add(hashtab, "Ocelot", 17);
+    // hashtab_add(hashtab, "Flamingo", 4);
+    // hashtab_add(hashtab, "Fox", 14);
+    // node = hashtab_lookup(hashtab, "Flamingo");
+    // if (node != NULL)
+    // printf("Node: %s, %d\n", node->key, node->value);
+
+    
     return 0;
 }
