@@ -1,7 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/time.h>
+#include <time.h>
 #include "bstree.h"
+
+
+double wtime()
+{
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return (double)t.tv_sec + (double)t.tv_usec * 1E-6;
+}
+
+int getrand(int min,int max)
+{
+    return (double)rand()/(RAND_MAX + 1.0) * (max - min) + min;
+}
 
 void tree_print(struct bstree * tree) {
     if (tree == NULL){} 
@@ -90,11 +105,7 @@ struct bstree *bstree_max(struct bstree *tree)
 
 int main()
 {
-    struct bstree *tree = NULL;
-    tree = bstree_create("zzz", 100);
-    bstree_add(tree,"dfassafsha", 20);
-    bstree_add(tree,"dfaadsfsdssafsha", 20);
-    bstree_add(tree,"dfassadsaffsha", 20);
+
     // printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
     // printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
     FILE *file;
@@ -102,19 +113,32 @@ int main()
         printf("Cannot open file.\n");
         exit(1);
     }
-    char **str = (char**)malloc(sizeof(char*));
+    char **words = (char**)malloc(sizeof(char*));
     int n = 0;
     while (!feof(file))
     {
-        str[n] = (char*)malloc(sizeof(char)* 256);
-        fgets(str[n], 256, file);
+        words[n] = (char*)malloc(sizeof(char)* 256);
+        fgets(words[n], 256, file);
         n++;
-        str = (char**)realloc(str, sizeof(char*)*(n + 1));
+        words = (char**)realloc(words, sizeof(char*)*(n + 1));
     }
     fclose(file);
-    for(int i = 0;i<100;i++)
-        bstree_add(tree, str[i], 1);
-    
+
+
+    struct bstree *tree = NULL;
+    struct bstree *node = NULL;
+    double t;
+    tree = bstree_create("zzz", 100);
+    for(int i = 2;i<200000;i++){
+        bstree_add(tree, words[i], 1);
+        if (i%10000==0){
+            t = wtime();
+            node = bstree_lookup(tree, words[getrand(0, i - 1)]);
+            t = wtime() - t;
+            printf("n = %d; time = %.6lf\n", i - 1, t);
+        }
+    }
+        
     // tree_print(tree);
     return 0;
 }
