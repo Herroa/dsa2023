@@ -129,13 +129,17 @@ int main()
     struct bstree *node = NULL;
     double t;
     tree = bstree_create("zzz", 100);
-    for(int i = 2;i<200000;i++){
-        bstree_add(tree, words[i], 1);
+    for(int i = 2;i<200001;i++){
+        // bstree_add(tree, words[i], 1);
+        bstree_add(tree, words[200000 - i], 1);
+        /////
         if (i%10000==0){
             t = wtime();
-            node = bstree_lookup(tree, words[getrand(0, i - 1)]);
+            bstree_min(tree)->key;
+            // node = bstree_lookup(tree, words[getrand(0, i - 1)]);
+            /////
             t = wtime() - t;
-            printf("n = %d; time = %.6lf\n", i - 1, t);
+            printf("%.6lf\n", t);
         }
     }
         

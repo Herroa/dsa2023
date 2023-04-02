@@ -100,13 +100,13 @@ int main()
     struct listnode *node;
     double t;
     hashtab_init(hashtab);
-    for(int i = 2;i<200000;i++){
+    for(int i = 2;i<200001;i++){
         hashtab_add(hashtab, words[i], 17);
         if (i%10000==0){
             t = wtime();
             node = hashtab_lookup(hashtab, words[getrand(0, i - 1)]);
             t = wtime() - t;
-            printf("n = %d; time = %.6lf\n", i - 1, t);
+            printf("%d %.6lf\n", i, t);
         }
     }
     ///
