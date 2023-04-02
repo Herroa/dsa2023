@@ -27,6 +27,14 @@ unsigned int hashtab_hash(char *s)
     return h % HASHTAB_SIZE;
 }
 
+unsigned int AddHash(char *s)
+{
+    unsigned int h = 0;
+    while (*s)
+        h += (unsigned int)*s++;
+    return h % HASHTAB_SIZE;
+}
+
 void hashtab_init(struct listnode **hashtab)
 {
     int i;
@@ -34,11 +42,16 @@ void hashtab_init(struct listnode **hashtab)
         hashtab[i] = NULL;
 }
 
-void hashtab_add(struct listnode **hashtab, char *key, int value)
+void hashtab_add(struct listnode **hashtab, char *key, int value, int *count)
 {
     struct listnode *node;
 
     int index = hashtab_hash(key);
+    // int index = AddHash(key);
+    if(hashtab[index] != NULL){
+        *count+=1;
+    }
+    ////
     node = malloc(sizeof(*node));
     if (node != NULL) {
         node->key = key;
@@ -46,6 +59,7 @@ void hashtab_add(struct listnode **hashtab, char *key, int value)
         node->next = hashtab[index];
         hashtab[index] = node;
     }
+    
 }
 
 struct listnode *hashtab_lookup(struct listnode **hashtab, char *key)
@@ -99,14 +113,15 @@ int main()
     struct listnode *hashtab[HASHTAB_SIZE];
     struct listnode *node;
     double t;
+    int colisions = 0; int *p = &colisions;
     hashtab_init(hashtab);
     for(int i = 2;i<200001;i++){
-        hashtab_add(hashtab, words[i], 17);
+        hashtab_add(hashtab, words[i], 17, p);
         if (i%10000==0){
             t = wtime();
             node = hashtab_lookup(hashtab, words[getrand(0, i - 1)]);
             t = wtime() - t;
-            printf("%d %.6lf\n", i, t);
+            printf("%d %.6lf %d\n", i, t, colisions);
         }
     }
     ///
