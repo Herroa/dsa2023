@@ -4,7 +4,7 @@
 #include <sys/time.h>
 #include <time.h>
 #include"hashtable.h"
-#define HASHTAB_SIZE 203000
+#define HASHTAB_SIZE 200003
 
 double wtime()
 {
@@ -45,7 +45,7 @@ void hashtab_init(struct listnode **hashtab)
 void hashtab_add(struct listnode **hashtab, char *key, int value, int *count)
 {
     struct listnode *node;
-
+    node = malloc(sizeof(*node));
     int index = hashtab_hash(key);
     // int index = AddHash(key);
     if(hashtab[index] != NULL){
@@ -53,7 +53,6 @@ void hashtab_add(struct listnode **hashtab, char *key, int value, int *count)
         *count+=1;
     }
     ////
-    node = malloc(sizeof(*node));
     if (node != NULL) {
         node->key = key;
         node->value = value;
