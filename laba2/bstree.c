@@ -35,6 +35,7 @@ struct bstree *bstree_create(char *key, int value)
         tmp -> value = value;
         tmp -> left = NULL;
         tmp -> right = NULL;
+        tmp -> parent = NULL;
     }
     return tmp;
 }
@@ -58,10 +59,14 @@ void bstree_add(struct bstree *tree, char *key, int value)
         }
     }
     node = bstree_create(key, value);
-        if (strcmp(parent->key,key)>0)
+        if (strcmp(parent->key,key)>0){
             parent->left = node;
-        else
+            node -> parent = parent;
+        }
+        else{
             parent->right = node;
+            node -> parent = parent;
+        }
     // printf("file added %s\n",key);
 }
 
@@ -100,6 +105,73 @@ struct bstree *bstree_max(struct bstree *tree)
     return r;
 }
 
+struct bstree *bstree_delete(struct bstree* tree, char* key)
+{
+    struct bstree* parent = NULL;
+    struct bstree* node = tree;
+    struct bstree* node = bstree_lookup(tree,key);
+    parent = node -> parent;
+    if (node == NULL) {
+        return;
+    }
+    // Случай 1: удаляемый узел не имеет дочерних элементов, т. е. является листовым узлом
+    if (node->left == NULL && node->right == NULL)
+    {
+        // если удаляемый узел не является корневым узлом, то устанавливаем его
+        // родительский левый/правый дочерний элемент в null
+        if (node != tree)
+        {
+            if (parent->left == node) {
+                parent->left = NULL;
+            }
+            else {
+                parent->right = NULL;
+            }
+        }
+        // если дерево имеет только корневой узел, устанавливаем его в null
+        else {
+            tree = NULL;
+        }
+        // освобождаем память
+        free(node);        // или delete node;
+    }
+    // Случай 2: удаляемый узел имеет двух потомков
+    else if (node->left && node->right)
+    {
+        // найти его неупорядоченный узел-преемник
+        struct bstree* successor = bstree_min(node->right);
+        // сохраняем последующее значение
+        char *val = successor->key;
+        // рекурсивно удаляем преемника. Обратите внимание, что преемник
+        // будет иметь не более одного потомка (правого потомка)
+        bstree_delete(tree, successor->key);
+        // копируем значение преемника в текущий узел
+        node->key = val;
+    }
+    // Случай 3: удаляемый узел имеет только одного потомка
+    else {
+        // выбираем дочерний узел
+        struct bstree* child = (node->left)? node->left: node->right;
+        // если удаляемый узел не является корневым узлом, устанавливаем его родителя
+        // своему потомку
+        if (node != tree)
+        {
+            if (node == parent->left) {
+                parent->left = child;
+            }
+            else {
+                parent->right = child;
+            }
+        }
+        // если удаляемый узел является корневым узлом, то установить корень дочернему
+        else {
+            tree = child;
+        }
+        // освобождаем память
+        free(node);
+    }
+}
+
 
 
 
@@ -130,13 +202,13 @@ int main()
     double t;
     tree = bstree_create("zzz", 100);
     for(int i = 2;i<200001;i++){
-        // bstree_add(tree, words[i], 1);
+        // bstree_add(tree, words[getrand(0, i - 1)], 1);
         bstree_add(tree, words[200000 - i], 1);
         /////
         if (i%10000==0){
             t = wtime();
-            bstree_min(tree)->key;
-            // node = bstree_lookup(tree, words[getrand(0, i - 1)]);
+            // bstree_min(tree)->key;
+            node = bstree_lookup(tree, words[getrand(0, i - 1)]);
             /////
             t = wtime() - t;
             printf("%.6lf\n", t);
