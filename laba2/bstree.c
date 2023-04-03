@@ -31,7 +31,7 @@ struct bstree *bstree_create(char *key, int value)
 {
     struct bstree *tmp = malloc(sizeof(struct bstree));
     if(tmp != NULL){
-        tmp -> key = key;
+        tmp -> key = strdup(key);
         tmp -> value = value;
         tmp -> left = NULL;
         tmp -> right = NULL;
@@ -72,6 +72,7 @@ void bstree_add(struct bstree *tree, char *key, int value)
 
 struct bstree *bstree_lookup(struct bstree *tree, char *key)
 {
+
     while (tree != NULL) {
         if (strcmp(key,tree -> key) == 0)
             return tree;
@@ -84,13 +85,15 @@ struct bstree *bstree_lookup(struct bstree *tree, char *key)
 }
 
 
-struct bstree *bstree_min(struct bstree *tree)
+struct bstree *bstree_min(struct bstree *tree, int *deep_pointer)
 {
     if (tree == NULL)
         return NULL;
     struct bstree *l = tree;
-    while (l -> left != NULL)
+    while (l -> left != NULL){
         l = l -> left;
+        *deep_pointer+=1;
+    }
     return l;
 }
 
@@ -105,58 +108,58 @@ struct bstree *bstree_max(struct bstree *tree)
     return r;
 }
 
-struct bstree *bstree_delete(struct bstree* tree, char* key)
-{
-    struct bstree* parent = NULL;
-    struct bstree* node = bstree_lookup(tree,key);
-    parent = node -> parent;
-    if (node == NULL) {
-        return NULL;
-    }
-    // Случай 1: удаляемый узел не имеет дочерних элементов, т. е. является листовым узлом
-    if (node->left == NULL && node->right == NULL)
-    {
-        if (node != tree)
-        {
-            if (parent->left == node) {
-                parent->left = NULL;
-            }
-            else {
-                parent->right = NULL;
-            }
-        }
-        else {
-            tree = NULL;
-        }
-        free(node);
-    }
-    // Случай 2: удаляемый узел имеет двух потомков
-    else if (node->left && node->right)
-    {
-        struct bstree* successor = bstree_min(node->right);
-        char *val = successor->key;
-        bstree_delete(tree, successor->key);
-        node->key = val;
-    }
-    // Случай 3: удаляемый узел имеет только одного потомка
-    else {
-        struct bstree* child = (node->left)? node->left: node->right;
-        if (node != tree)
-        {
-            if (node == parent->left) {
-                parent->left = child;
-            }
-            else {
-                parent->right = child;
-            }
-        }
-        else {
-            tree = child;
-        }
-        free(node);
-    }
-    return tree;
-}
+// struct bstree *bstree_delete(struct bstree* tree, char* key)
+// {
+//     struct bstree* parent = NULL;
+//     struct bstree* node = bstree_lookup(tree,key);
+//     parent = node -> parent;
+//     if (node == NULL) {
+//         return NULL;
+//     }
+//     // Случай 1: удаляемый узел не имеет дочерних элементов, т. е. является листовым узлом
+//     if (node->left == NULL && node->right == NULL)
+//     {
+//         if (node != tree)
+//         {
+//             if (parent->left == node) {
+//                 parent->left = NULL;
+//             }
+//             else {
+//                 parent->right = NULL;
+//             }
+//         }
+//         else {
+//             tree = NULL;
+//         }
+//         free(node);
+//     }
+//     // Случай 2: удаляемый узел имеет двух потомков
+//     else if (node->left && node->right)
+//     {
+//         struct bstree* successor = bstree_min(node->right);
+//         char *val = successor->key;
+//         bstree_delete(tree, successor->key);
+//         node->key = val;
+//     }
+//     // Случай 3: удаляемый узел имеет только одного потомка
+//     else {
+//         struct bstree* child = (node->left)? node->left: node->right;
+//         if (node != tree)
+//         {
+//             if (node == parent->left) {
+//                 parent->left = child;
+//             }
+//             else {
+//                 parent->right = child;
+//             }
+//         }
+//         else {
+//             tree = child;
+//         }
+//         free(node);
+//     }
+//     return tree;
+// }
 
 
 
@@ -167,7 +170,7 @@ int main()
     // printf("%d\t%s\n",bstree_min(tree)->value,bstree_min(tree)->key);
     // printf("%d\t%s\n",bstree_max(tree)->value,bstree_max(tree)->key);
     FILE *file;
-    if ((file = fopen("words.txt", "r"))==NULL) {
+    if ((file = fopen("sorted_words", "r"))==NULL) {
         printf("Cannot open file.\n");
         exit(1);
     }
@@ -185,7 +188,7 @@ int main()
 
     struct bstree *tree = NULL;
     struct bstree *node = NULL;
-    double t;
+    double t; int deep = 0; int *deep_pointer = &deep;
     tree = bstree_create("zzz", 100);
     for(int i = 2;i<200001;i++){
         // bstree_add(tree, words[getrand(0, i - 1)], 1);
@@ -193,14 +196,14 @@ int main()
         /////
         if (i%10000==0){
             t = wtime();
-            // bstree_min(tree)->key;
-            node = bstree_lookup(tree, words[getrand(0, i - 1)]);
+            bstree_min(tree, deep_pointer);
+            // node = bstree_lookup(tree, words[getrand(0, i - 1)]);
             /////
             t = wtime() - t;
-            printf("%d %.6lf\n", i, t);
+            printf("%d %.6lf,%d\n", i, t,deep);
+            *deep_pointer = 0;
         }
-    }
-        
+    }    
     // tree_print(tree);
     for(int i = 0;i<n;i++){
         free(words[n]);
