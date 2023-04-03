@@ -135,6 +135,9 @@ int main()
     // if (node != NULL)
     // printf("Node: %s, %d\n", node->key, node->value);
 
-    
+    for(int i = 0;i<n;i++){
+        free(words[n]);
+    }
+    free(words);
     return 0;
 }

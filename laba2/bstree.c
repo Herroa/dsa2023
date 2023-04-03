@@ -144,5 +144,9 @@ int main()
     }
         
     // tree_print(tree);
+    for(int i = 0;i<n;i++){
+        free(words[n]);
+    }
+    free(words);
     return 0;
 }
