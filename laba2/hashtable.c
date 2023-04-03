@@ -49,6 +49,7 @@ void hashtab_add(struct listnode **hashtab, char *key, int value, int *count)
     int index = hashtab_hash(key);
     // int index = AddHash(key);
     if(hashtab[index] != NULL){
+        node -> next = node;
         *count+=1;
     }
     ////
