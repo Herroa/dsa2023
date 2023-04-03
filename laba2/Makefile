@@ -5,10 +5,10 @@ hashtable: hashtable.c hashtable.h
 bstree: bstree.c bstree.h
 	gcc -Wall -o bstree bstree.c
 
-run_hashtable: hashtable
+hashtable_run: hashtable
 	./hashtable
 
-run_bstree: bstree
+bstree_run: bstree
 	./bstree
 
 clean:
